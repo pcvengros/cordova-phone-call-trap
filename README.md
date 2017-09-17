@@ -2,11 +2,13 @@ Cordova PhoneCall Trap
 =======================
 
 It is a Apache Cordova plugin to simplify handling phone call status and events in Android devices.
+I've integrated some Pull Requests, as those of @alkoschuster.
+The original project is available here: https://github.com/renanoliveira/cordova-phone-call-trap
 
 
 ## Install
 
-    $ cordova plugin add io.gvox.plugin.phonecalltrap
+    $ ionic cordova plugin add https://github.com/De-Lac/cordova-phone-call-trap.git
 
 
 ## Quick Example
@@ -32,6 +34,7 @@ It is a Apache Cordova plugin to simplify handling phone call status and events 
 ## Supported platforms
 
 - Android 2.3.3 or higher
+- IOS
 
 
 ## References
