@@ -5,12 +5,13 @@
   "cordova": {
     "id": "io.gvox.plugin.phonecalltrap",
     "platforms": [
-      "android"
+      "android",
+      "ios"
     ]
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/renanoliveira/cordova-phone-call-trap.git"
+    "url": "git+https://github.com/De-Lac/cordova-phone-call-trap.git"
   },
   "keywords": [
     "phonegap",
@@ -24,10 +25,10 @@
     "ecosystem:cordova",
     "cordova-android"
   ],
-  "author": "Renan Oliveira and Felipe Ferreira",
+  "author": "Renan Oliveira, Felipe Ferreira and @alkoschuster",
   "license": "MIT",
   "bugs": {
     "url": "https://github.com/renanoliveira/cordova-phone-call-trap/issues"
   },
-  "homepage": "https://github.com/renanoliveira/cordova-phone-call-trap#readme"
+  "homepage": "https://github.com/De-Lac/cordova-phone-call-trap#readme"
 }
