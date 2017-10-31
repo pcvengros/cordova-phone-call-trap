@@ -3,22 +3,23 @@ Cordova PhoneCall Trap
 
 It is a Apache Cordova plugin to simplify handling phone call status and events in Android devices.
 I've integrated some Pull Requests, as those of @alkoschuster.
-The original project is available here: https://github.com/renanoliveira/cordova-phone-call-trap
+The original project is available here: ichirkin/cordova-phone-call-trap
 
 
 ## Install
 
-    $ ionic cordova plugin add https://github.com/De-Lac/cordova-phone-call-trap.git
+    $ cordova plugin add https://github.com/ichirkin/cordova-phone-call-trap.git
 
 
 ## Quick Example
 
-    PhoneCallTrap.onCall(function(state) {
+    PhoneCallTrap.onCall(function(state, phone) {
         console.log("CHANGE STATE: " + state);
 
         switch (state) {
             case "RINGING":
                 console.log("Phone is ringing");
+                console.log(phone);
                 break;
             case "OFFHOOK":
                 console.log("Phone is off-hook");
