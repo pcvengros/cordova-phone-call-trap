@@ -3,7 +3,11 @@ package io.gvox.phonecalltrap;
 import org.apache.cordova.CordovaPlugin;
 import org.apache.cordova.CallbackContext;
 import org.apache.cordova.PluginResult;
+
+import android.Manifest;
 import android.content.Context;
+import android.content.pm.PackageManager;
+import android.support.v4.app.ActivityCompat;
 import android.telephony.PhoneStateListener;
 import android.telephony.TelephonyManager;
 
@@ -16,6 +20,9 @@ public class PhoneCallTrap extends CordovaPlugin {
     CallStateListener listener;
 
     public boolean execute(String action, JSONArray args, CallbackContext callbackContext) throws JSONException {
+        if (ActivityCompat.checkSelfPermission(cordova.getContext(), Manifest.permission.READ_PHONE_STATE) != PackageManager.PERMISSION_GRANTED) {
+            ActivityCompat.requestPermissions(cordova.getActivity(), new String[]{Manifest.permission.READ_PHONE_STATE}, 3);
+        }
         prepareListener();
 
         listener.setCallbackContext(callbackContext);
