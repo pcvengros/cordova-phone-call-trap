@@ -30,7 +30,22 @@ The original project is available here: ichirkin/cordova-phone-call-trap
                 break;
         }
     });
+	
+## Reject call
 
+    PhoneCallTrap.rejectCall(function() {
+        console.log("SUCCESSFULLY REJECTED");
+    }, function(error) {
+        console.error("THERE WAS AN ERROR REJECTING", error);
+    });
+	
+## Silence call
+
+    PhoneCallTrap.silenceCall(function() {
+        console.log("SUCCESSFULLY SILENCED");
+    }, function(error) {
+        console.error("THERE WAS AN ERROR SILENCING", error);
+    });
 
 ## Supported platforms
 

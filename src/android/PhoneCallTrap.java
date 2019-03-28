@@ -1,24 +1,81 @@
 package io.gvox.phonecalltrap;
 
-import org.apache.cordova.CordovaPlugin;
-import org.apache.cordova.CallbackContext;
-import org.apache.cordova.PluginResult;
+import android.Manifest;
+import android.annotation.SuppressLint;
 import android.content.Context;
+import android.content.pm.PackageManager;
+import android.media.AudioManager;
+import android.support.v4.app.ActivityCompat;
 import android.telephony.PhoneStateListener;
 import android.telephony.TelephonyManager;
 
-import org.json.JSONException;
+import org.apache.cordova.CallbackContext;
+import org.apache.cordova.CordovaPlugin;
+import org.apache.cordova.PluginResult;
 import org.json.JSONArray;
+import org.json.JSONException;
 import org.json.JSONObject;
+
+import java.lang.reflect.Method;
+import java.util.Objects;
+
+import static android.content.Context.TELEPHONY_SERVICE;
 
 public class PhoneCallTrap extends CordovaPlugin {
 
-    CallStateListener listener;
+    private CallStateListener listener;
+    private AudioManager audioManager;
 
-    public boolean execute(String action, JSONArray args, CallbackContext callbackContext) throws JSONException {
-        prepareListener();
+    public boolean execute(String action, JSONArray args, CallbackContext callbackContext) {
 
-        listener.setCallbackContext(callbackContext);
+        if (ActivityCompat.checkSelfPermission(cordova.getContext(), Manifest.permission.READ_PHONE_STATE) != PackageManager.PERMISSION_GRANTED) {
+            ActivityCompat.requestPermissions(cordova.getActivity(), new String[]{Manifest.permission.READ_PHONE_STATE}, 3);
+        }
+
+        if (ActivityCompat.checkSelfPermission(cordova.getContext(), Manifest.permission.CALL_PHONE) != PackageManager.PERMISSION_GRANTED) {
+            ActivityCompat.requestPermissions(cordova.getActivity(), new String[]{Manifest.permission.CALL_PHONE}, 3);
+        }
+
+        switch (action) {
+
+            case "onCall":
+
+                prepareListener();
+
+                listener.setCallbackContext(callbackContext);
+                break;
+            case "rejectCall":
+                try {
+                    TelephonyManager tm = (TelephonyManager) cordova.getActivity().getSystemService(TELEPHONY_SERVICE);
+
+                    @SuppressLint("PrivateApi")
+                    Method m1 = Objects.requireNonNull(tm).getClass().getDeclaredMethod("getITelephony");
+                    m1.setAccessible(true);
+                    Object iTelephony = m1.invoke(tm);
+
+                    Method m3 = iTelephony.getClass().getDeclaredMethod("endCall");
+
+                    m3.invoke(iTelephony);
+                } catch (NoSuchMethodException e) {
+                    callbackContext.error("No such method error " + e.getMessage());
+                } catch (Exception e3) {
+                    callbackContext.error("Exception: " + e3.getMessage());
+                }
+                break;
+            case "silenceCall":
+                if (this.audioManager == null) {
+                    this.audioManager = (AudioManager) cordova.getContext().getSystemService(Context.AUDIO_SERVICE);
+                    listener.setAudioManager(this.audioManager);
+                }
+                if (this.audioManager != null) {
+                    int currentMode = this.audioManager.getRingerMode();
+                    this.audioManager.setRingerMode(AudioManager.RINGER_MODE_SILENT);
+                    listener.setLastCallMode(currentMode);
+                }
+                break;
+            default:
+                return false;
+        }
 
         return true;
     }
@@ -26,8 +83,10 @@ public class PhoneCallTrap extends CordovaPlugin {
     private void prepareListener() {
         if (listener == null) {
             listener = new CallStateListener();
-            TelephonyManager TelephonyMgr = (TelephonyManager) cordova.getActivity().getSystemService(Context.TELEPHONY_SERVICE);
-            TelephonyMgr.listen(listener, PhoneStateListener.LISTEN_CALL_STATE);
+            TelephonyManager TelephonyMgr = (TelephonyManager) cordova.getActivity().getSystemService(TELEPHONY_SERVICE);
+            if (TelephonyMgr != null) {
+                TelephonyMgr.listen(listener, PhoneStateListener.LISTEN_CALL_STATE);
+            }
         }
     }
 }
@@ -35,41 +94,57 @@ public class PhoneCallTrap extends CordovaPlugin {
 class CallStateListener extends PhoneStateListener {
 
     private CallbackContext callbackContext;
+    private int lastCallMode = -1;
+    private AudioManager audioManager;
 
-    public void setCallbackContext(CallbackContext callbackContext) {
+    void setLastCallMode(int mode) {
+        this.lastCallMode = mode;
+    }
+
+    void setAudioManager(AudioManager am) {
+        this.audioManager = am;
+    }
+
+    void setCallbackContext(CallbackContext callbackContext) {
         this.callbackContext = callbackContext;
+    }
+
+    private void resetCallMode() {
+        if (this.lastCallMode != -1 && this.audioManager != null) {
+            this.audioManager.setRingerMode(this.lastCallMode);
+            this.lastCallMode = -1;
+        }
     }
 
     public void onCallStateChanged(int state, String incomingNumber) {
         super.onCallStateChanged(state, incomingNumber);
-
+        this.resetCallMode();
         if (callbackContext == null) return;
 
         String msg = "";
 
         switch (state) {
             case TelephonyManager.CALL_STATE_IDLE:
-            msg = "IDLE";
-            break;
+                msg = "IDLE";
+                break;
 
             case TelephonyManager.CALL_STATE_OFFHOOK:
-            msg = "OFFHOOK";
-            break;
+                msg = "OFFHOOK";
+                break;
 
             case TelephonyManager.CALL_STATE_RINGING:
-            msg = "RINGING";
-            break;
+                msg = "RINGING";
+                break;
         }
-		
+
         // add number info
-		JSONObject callResult = new JSONObject();
-		try {
-			callResult.put("state", msg);
-			callResult.put("number", incomingNumber);
-		}
-        catch(JSONException e){
-			
-		}
+        JSONObject callResult = new JSONObject();
+        try {
+            callResult.put("state", msg);
+            callResult.put("number", incomingNumber);
+        } catch (JSONException e) {
+            //squelch
+        }
 
         PluginResult result = new PluginResult(PluginResult.Status.OK, callResult);
         result.setKeepCallback(true);
