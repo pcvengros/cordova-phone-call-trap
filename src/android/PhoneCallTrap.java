@@ -2,9 +2,13 @@ package io.gvox.phonecalltrap;
 
 import android.Manifest;
 import android.annotation.SuppressLint;
+import android.app.NotificationManager;
 import android.content.Context;
+import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.media.AudioManager;
+import android.os.Build;
+import android.provider.Settings;
 import android.support.v4.app.ActivityCompat;
 import android.telephony.PhoneStateListener;
 import android.telephony.TelephonyManager;
@@ -25,6 +29,7 @@ public class PhoneCallTrap extends CordovaPlugin {
 
     private CallStateListener listener;
     private AudioManager audioManager;
+    private NotificationManager notificationManager = null;
 
     public boolean execute(String action, JSONArray args, CallbackContext callbackContext) {
 
@@ -63,14 +68,23 @@ public class PhoneCallTrap extends CordovaPlugin {
                 }
                 break;
             case "silenceCall":
+                Context context = cordova.getContext();
                 if (this.audioManager == null) {
-                    this.audioManager = (AudioManager) cordova.getContext().getSystemService(Context.AUDIO_SERVICE);
+                    this.audioManager = (AudioManager) context.getSystemService(Context.AUDIO_SERVICE);
                     listener.setAudioManager(this.audioManager);
                 }
-                if (this.audioManager != null) {
-                    int currentMode = this.audioManager.getRingerMode();
-                    this.audioManager.setRingerMode(AudioManager.RINGER_MODE_SILENT);
-                    listener.setLastCallMode(currentMode);
+
+                if (this.notificationManager == null) {
+                    this.notificationManager = (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
+                }
+                if (this.audioManager != null && this.notificationManager != null) {
+                    if (Build.VERSION.SDK_INT < Build.VERSION_CODES.M || this.notificationManager.isNotificationPolicyAccessGranted()) {
+                        int currentMode = this.audioManager.getRingerMode();
+                        this.audioManager.setRingerMode(AudioManager.RINGER_MODE_SILENT);
+                        listener.setLastCallMode(currentMode);
+                    } else {
+                        cordova.getActivity().startActivity(new Intent(Settings.ACTION_NOTIFICATION_POLICY_ACCESS_SETTINGS));
+                    }
                 }
                 break;
             default:
