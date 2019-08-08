@@ -40,6 +40,10 @@ public class PhoneCallTrap extends CordovaPlugin {
         if (ActivityCompat.checkSelfPermission(cordova.getContext(), Manifest.permission.CALL_PHONE) != PackageManager.PERMISSION_GRANTED) {
             ActivityCompat.requestPermissions(cordova.getActivity(), new String[]{Manifest.permission.CALL_PHONE}, 3);
         }
+        
+        if (ActivityCompat.checkSelfPermission(cordova.getContext(), Manifest.permission.READ_CALL_LOG) != PackageManager.PERMISSION_GRANTED) {
+            ActivityCompat.requestPermissions(cordova.getActivity(), new String[]{Manifest.permission.READ_CALL_LOG}, 3);
+        }
 
         switch (action) {
 
