@@ -1,9 +1,9 @@
 {
-  "name": "io.gvox.plugin.phonecalltrap",
-  "version": "0.1.2",
-  "description": "A phone call trap",
+  "name": "cordova-phone-call-trap",
+  "version": "0.2.0",
+  "description": "Cordova plugin to access phone and calls state",
   "cordova": {
-    "id": "io.gvox.plugin.phonecalltrap",
+    "id": "cordova-phone-call-trap",
     "platforms": [
       "android",
       "ios"
@@ -11,7 +11,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/De-Lac/cordova-phone-call-trap.git"
+    "url": "git+https://github.com/pcvengros/cordova-phone-call-trap.git"
   },
   "keywords": [
     "phonegap",
@@ -25,10 +25,45 @@
     "ecosystem:cordova",
     "cordova-android"
   ],
-  "author": "Renan Oliveira, Felipe Ferreira and @alkoschuster",
+  "deprecated": false,
+  "devDependencies": {
+    "eslint": "^4.3.0",
+    "eslint-config-semistandard": "^11.0.0",
+    "eslint-config-standard": "^10.2.1",
+    "eslint-plugin-import": "^2.3.0",
+    "eslint-plugin-node": "^5.0.0",
+    "eslint-plugin-promise": "^3.5.0",
+    "eslint-plugin-standard": "^3.0.1"
+  },
+  "engines": {
+    "cordovaDependencies": {
+      "3.0.0": {
+        "cordova-android": ">=6.3.0"
+      },
+      "4.1.0": {
+        "cordova": ">=7.1.0",
+        "cordova-android": ">=6.3.0"
+      },
+      "5.0.0": {
+        "cordova": ">100"
+      }
+    }
+  },
+  "author": {
+    "name": "Renan Oliveira"
+  },
+  "contributors": [
+    "Felipe Ferreira",
+    "@alkoschuster",
+    "Pavol Cvengros"
+  ],
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/renanoliveira/cordova-phone-call-trap/issues"
+    "url": "https://github.com/pcvengros/cordova-phone-call-trap/issues"
   },
-  "homepage": "https://github.com/De-Lac/cordova-phone-call-trap#readme"
+  "homepage": "https://github.com/pcvengros/cordova-phone-call-trap/#readme",
+  "scripts": {
+    "eslint": "node node_modules/eslint/bin/eslint www && node node_modules/eslint/bin/eslint src && node node_modules/eslint/bin/eslint tests",
+    "test": "npm run eslint"
+  }
 }

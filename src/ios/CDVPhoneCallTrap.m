@@ -1,9 +1,6 @@
-
-
 #import "CDVPhoneCallTrap.h"
 #import <CoreTelephony/CTCallCenter.h>
 #import <CoreTelephony/CTCall.h>
-
 
 @implementation CDVPhoneCallTrap
 
@@ -17,9 +14,9 @@
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(callConnected:) name:CTCallStateConnected object:nil];
 
     self.callCenter.callEventHandler = ^(CTCall *call){
-        
+
         NSString *callState;
-        
+
         if ([call.callState isEqualToString: CTCallStateConnected])
         {
             NSLog(@"call CTCallStateConnected - OFFHOOK");
@@ -44,7 +41,7 @@
             NSLog(@"call NO - IDLE");
             callState = @"IDLE";
         }
-        
+
         CDVPluginResult* pluginResult = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK messageAsString:callState];
         [self.commandDelegate sendPluginResult:pluginResult callbackId:command.callbackId];
     };

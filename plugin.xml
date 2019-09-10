@@ -1,23 +1,25 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<plugin xmlns="http://www.phonegap.com/ns/plugins/1.0"
-        id="io.gvox.plugin.phonecalltrap"
-        version="0.1.2">
+<plugin xmlns="http://apache.org/cordova/ns/plugins/1.0"
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        id="cordova-phone-call-trap"
+        version="0.2.0">
     <name>PhoneCallTrap</name>
-    <description>A phone call trap</description>
+    <description>Cordova plugin to access phone and calls state</description>
     <license>MIT</license>
-    <keywords>phonegap,calendar, phone, call, phone-call</keywords>
-
+    <keywords>cordova, calendar, phone, call, phone-call</keywords>
+    <repo>https://github.com/pcvengros/cordova-phone-call-trap</repo>
+    <issue>https://github.com/pcvengros/cordova-phone-call-trap/issues</issue>
 
     <js-module src="www/PhoneCallTrap.js" name="PhoneCallTrap">
-        <clobbers target="window.PhoneCallTrap"/>
+        <clobbers target="cordova.plugins.phonecalltrap"/>
     </js-module>
 
     <!-- android -->
     <platform name="android">
         <config-file target="res/xml/config.xml" parent="/*">
             <feature name="PhoneCallTrap">
-                <param name="android-package" value="io.gvox.phonecalltrap.PhoneCallTrap"/>
+                <param name="android-package" value="org.apache.cordova.plugin.phonecalltrap.PhoneCallTrap"/>
             </feature>
         </config-file>
 
@@ -29,8 +31,8 @@
 			<uses-permission android:name="android.permission.MODIFY_AUDIO_SETTINGS" />
         </config-file>
 
-        <source-file src="src/android/PhoneCallTrap.java" target-dir="src/io/gvox/phonecalltrap"/>
-		
+        <source-file src="src/android/PhoneCallTrap.java" target-dir="src/org/apache/cordova/phonecalltrap"/>
+
         <framework src="com.android.support:support-compat:27.1.1" />
     </platform>
 

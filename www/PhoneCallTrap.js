@@ -1,26 +1,34 @@
-var PhoneCallTrap = {
-    onCall: function(successCallback, errorCallback) {
-        errorCallback = errorCallback || this.errorCallback;
-        cordova.exec(successCallback, errorCallback, 'PhoneCallTrap', 'onCall', []);
-    },
+var exec = require('cordova/exec');
 
-    errorCallback: function() {
-        console.log("WARNING: PhoneCallTrap errorCallback not implemented");
-    },
-
-    getCurrentState: function(successCallback, errorCallback) {
-        errorCallback = errorCallback || this.errorCallback;
-        cordova.exec(successCallback, errorCallback, 'PhoneCallTrap', 'getCurrentState', []);
-    },
-
-    rejectCall: function(successCallback, errorCallback) {
-        errorCallback = errorCallback || this.errorCallback;
-        cordova.exec(successCallback, errorCallback, 'PhoneCallTrap', 'rejectCall', []);
-    },
-	silenceCall: function(successCallback, errorCallback) {
-        errorCallback = errorCallback || this.errorCallback;
-        cordova.exec(successCallback, errorCallback, 'PhoneCallTrap', 'silenceCall', []);
+exports.onCall = function(successCallback, errorCallback) {
+    if ( typeof errorCallback !== "function" ) {
+        errorCallback = this.errorCallback;
     }
+    exec(successCallback, errorCallback, 'PhoneCallTrap', 'onCall', []);
 };
 
-module.exports = PhoneCallTrap;
+exports.errorCallback = function() {
+    //console.log("WARNING: PhoneCallTrap errorCallback not implemented");
+};
+
+exports.getCurrentState = function(successCallback, errorCallback) {
+    if ( typeof errorCallback !== "function" ) {
+        errorCallback = this.errorCallback;
+    }
+    exec(successCallback, errorCallback, 'PhoneCallTrap', 'getCurrentState', []);
+};
+
+exports.rejectCall = function(successCallback, errorCallback) {
+    if ( typeof errorCallback !== "function" ) {
+        errorCallback = this.errorCallback;
+    }
+    exec(successCallback, errorCallback, 'PhoneCallTrap', 'rejectCall', []);
+};
+
+exports.silenceCall = function(successCallback, errorCallback) {
+    if ( typeof errorCallback !== "function" ) {
+        errorCallback = this.errorCallback;
+    }
+    exec(successCallback, errorCallback, 'PhoneCallTrap', 'silenceCall', []);
+};
+
