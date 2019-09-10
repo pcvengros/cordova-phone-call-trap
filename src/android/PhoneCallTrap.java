@@ -1,4 +1,4 @@
-package org.apache.cordova.plugin.phonecalltrap;
+package org.apache.cordova.plugins.phonecalltrap;
 
 import android.Manifest;
 import android.annotation.SuppressLint;
