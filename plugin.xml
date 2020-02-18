@@ -3,7 +3,7 @@
 <plugin xmlns="http://apache.org/cordova/ns/plugins/1.0"
         xmlns:android="http://schemas.android.com/apk/res/android"
         id="cordova-phone-call-trap"
-        version="0.2.0">
+        version="0.2.1">
     <name>PhoneCallTrap</name>
     <description>Cordova plugin to access phone and calls state</description>
     <license>MIT</license>
@@ -25,8 +25,6 @@
 
         <config-file target="AndroidManifest.xml" parent="/*">
             <uses-permission android:name="android.permission.READ_PHONE_STATE"/>
-            <uses-permission android:name="android.permission.READ_CALL_LOG" />
-            <uses-permission android:name="android.permission.PROCESS_OUTGOING_CALLS"/>
             <uses-permission android:name="android.permission.CALL_PHONE" />
 			<uses-permission android:name="android.permission.MODIFY_AUDIO_SETTINGS" />
         </config-file>

@@ -44,10 +44,6 @@ public class PhoneCallTrap extends CordovaPlugin {
             ActivityCompat.requestPermissions(cordova.getActivity(), new String[]{Manifest.permission.CALL_PHONE}, 3);
         }
 
-        if (ActivityCompat.checkSelfPermission(cordova.getContext(), Manifest.permission.READ_CALL_LOG) != PackageManager.PERMISSION_GRANTED) {
-            ActivityCompat.requestPermissions(cordova.getActivity(), new String[]{Manifest.permission.READ_CALL_LOG}, 3);
-        }
-
         switch (action) {
             case "onCall":
                 prepareListener();
@@ -165,7 +161,6 @@ class CallStateListener extends PhoneStateListener {
         JSONObject callResult = new JSONObject();
         try {
             callResult.put("state", msg);
-            callResult.put("number", incomingNumber);
         } catch (JSONException e) {
             //squelch
         }

@@ -1,6 +1,6 @@
 {
   "name": "cordova-phone-call-trap",
-  "version": "0.2.0",
+  "version": "0.2.1",
   "description": "Cordova plugin to access phone and calls state",
   "cordova": {
     "id": "cordova-phone-call-trap",
